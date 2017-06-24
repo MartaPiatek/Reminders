@@ -1,5 +1,6 @@
 package pl.martapiatek.reminders;
 
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,15 +12,48 @@ import android.widget.ListView;
 public class RemindersActivity extends AppCompatActivity {
 
     private ListView mListView;
+    private RemindersDbAdapter mDbAdapter;
+    private RemindersSimpleCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
         mListView = (ListView) findViewById(R.id.reminders_list_view);
+        mListView.setDivider(null);
+        mDbAdapter = new RemindersDbAdapter(this);
+        mDbAdapter.open();
+
+        Cursor cursor = mDbAdapter.fetchAllReminders();
+        // z kolumn zdefiniowanych w bazie danych
+        String[] from  =  new String[]{
+                RemindersDbAdapter.COL_CONTENT
+        };
+
+        // do identyfikatorów widoków w układzie graficznym
+        int[] to = new int[]{
+                R.id.row_text
+        };
+
+        mCursorAdapter = new RemindersSimpleCursorAdapter(
+                //kontekst
+                RemindersActivity.this,
+                //układ graficzny wiersza
+                R.layout.reminders_row,
+                //kursor
+                cursor,
+                // z kolumn zdefiniowanych w bazie danych
+                from,
+                // do identyfikatorów widoków w układzie graficznym
+                to,
+                //znacznik - nieużywany
+                0);
+        // cursorAdapter(kontroler) aktualizuje ListView(widok) danymi z bazy (model)
+        mListView.setAdapter(mCursorAdapter);
+
         // Obiekt arratAdapter jest w tym systemie MVC kontrolerem
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+    /*    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 //kontekst
                 this,
                 //układ graficzny (widok)
@@ -30,7 +64,7 @@ public class RemindersActivity extends AppCompatActivity {
                 new String[]{"pierwszy wiersz", "drugi wiersz", "trzeci wiersz"}
         );
         mListView.setAdapter(arrayAdapter);
-
+*/
     }
 
     @Override
