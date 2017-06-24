@@ -23,6 +23,14 @@ public class RemindersActivity extends AppCompatActivity {
         mListView.setDivider(null);
         mDbAdapter = new RemindersDbAdapter(this);
         mDbAdapter.open();
+        if(savedInstanceState == null){
+            //wyczyść wszystkie dane
+            mDbAdapter.deleteAllReminders();
+            //dodaj przykładowe dane
+            insertSomeReminders();
+
+
+        }
 
         Cursor cursor = mDbAdapter.fetchAllReminders();
         // z kolumn zdefiniowanych w bazie danych
@@ -67,6 +75,10 @@ public class RemindersActivity extends AppCompatActivity {
 */
     }
 
+    private void insertSomeReminders(String name, boolean important) {
+        mDbAdapter.createReminder(name, important);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -88,5 +100,21 @@ public class RemindersActivity extends AppCompatActivity {
                 return false;
         }
     }
-
+    private void insertSomeReminders() {
+        mDbAdapter.createReminder("Zakup książki", true);
+        mDbAdapter.createReminder("Wysłanie prezentu ojcu", false);
+        mDbAdapter.createReminder("Piątkowy obiad ze znajomymi", false);
+        mDbAdapter.createReminder("Gra w squasha", false);
+        mDbAdapter.createReminder("Odgarnąć i posolić podjazd", false);
+        mDbAdapter.createReminder("Przygotować program zajęć z Androida", true);
+        mDbAdapter.createReminder("Kupić nowe krzesło do biura", false);
+        mDbAdapter.createReminder("Zadzwonić do mechanika", false);
+        mDbAdapter.createReminder("Odnowić członkostwo w klubie", false);
+        mDbAdapter.createReminder("Kupić nowy telefon Android Galaxy", true);
+        mDbAdapter.createReminder("Sprzedać stary telefon android - aukcja", false);
+        mDbAdapter.createReminder("Kupić nowe wiosła do kajaka", false);
+        mDbAdapter.createReminder("Zadzwonić do księgowego", false);
+        mDbAdapter.createReminder("Kupić 300 000 akcji Google", false);
+        mDbAdapter.createReminder("Oddzwonić do Dalai Lamy", true);
+    }
 }
