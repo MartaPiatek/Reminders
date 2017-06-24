@@ -1,13 +1,18 @@
 package pl.martapiatek.reminders;
 
+import android.app.Dialog;
 import android.database.Cursor;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class RemindersActivity extends AppCompatActivity {
 
@@ -73,6 +78,42 @@ public class RemindersActivity extends AppCompatActivity {
         );
         mListView.setAdapter(arrayAdapter);
 */
+
+    //gdy klikamy konkretny element ListView
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int masterListPosition, long id) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(RemindersActivity.this);
+                ListView modeListView = new ListView(RemindersActivity.this);
+                String[] modes = new String[]{"Edycja przypomnienia", "Usunięcie przypomnienia"};
+                ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(RemindersActivity.this,
+                        android.R.layout.simple_list_item_1, android.R.id.text1, modes);
+                modeListView.setAdapter(modeAdapter);
+                builder.setView(modeListView);
+                final Dialog dialog = builder.create();
+                dialog.show();
+                modeListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+                                                        @Override
+                                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                            // edycja przypomnienia
+                                                            if(position == 0){
+                                                                Toast.makeText(RemindersActivity.this, "edycja pozycji " +
+                                                                masterListPosition, Toast.LENGTH_SHORT).show();
+                                                                //usunięcie przypomnienia
+                                                            }else {
+                                                                Toast.makeText(RemindersActivity.this, "usunięcie pozycji "+
+                                                                masterListPosition, Toast.LENGTH_SHORT).show();
+                                                            }
+                                                            dialog.dismiss();
+                                                        }
+                                                    }
+                );
+
+            }
+        });
     }
 
     private void insertSomeReminders(String name, boolean important) {
