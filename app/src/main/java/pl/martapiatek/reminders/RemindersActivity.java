@@ -38,7 +38,10 @@ public class RemindersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.mipmap.ic_launcher);
         mListView = (ListView) findViewById(R.id.reminders_list_view);
         mListView.setDivider(null);
         mDbAdapter = new RemindersDbAdapter(this);
